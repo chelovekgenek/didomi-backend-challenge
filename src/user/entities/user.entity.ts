@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Event } from './event.entity';
 
 @Entity()
 export class User {
@@ -13,6 +15,9 @@ export class User {
 
   @Column({ unique: true })
   email: string;
+
+  @OneToMany(() => Event, (event) => event.user, { onDelete: 'CASCADE' })
+  events: Event[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
