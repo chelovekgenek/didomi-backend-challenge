@@ -5,25 +5,23 @@ import {
   ManyToOne,
   JoinColumn,
   Column,
-  Unique,
 } from 'typeorm';
 
 import { NotificationType } from '../dtos';
 import { User } from './user.entity';
 
 @Entity()
-@Unique(['type', 'user'])
 export class Event {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
-  @Column()
+  @Column({ default: false })
   enabled: boolean;
 
   @Column({ enum: NotificationType })
   type: NotificationType;
 
-  @ManyToOne(() => User, (user) => user.events)
+  @ManyToOne(() => User, (user) => user.consents)
   @JoinColumn({ name: 'user_id' })
   user: User;
 

@@ -1,9 +1,4 @@
-import {
-  Logger,
-  ValidationError,
-  ValidationPipe,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { NestApplication, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as path from 'path';
@@ -19,22 +14,6 @@ const packageJson = JSON.parse(
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger(NestApplication.name);
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      exceptionFactory: (errors: ValidationError[]) => {
-        let error = errors[0];
-        while (error.children && error.children.length) {
-          error = error.children[0];
-        }
-        const errorMessage =
-          error.constraints[Object.keys(error.constraints)[0]];
-        throw new UnprocessableEntityException(errorMessage);
-      },
-    }),
-  );
 
   const options = new DocumentBuilder()
     .setTitle('API Gateway')

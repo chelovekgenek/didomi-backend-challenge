@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
+import { IsEmail } from 'class-validator';
 
 import { EventDto } from './event.dto';
 
@@ -18,7 +18,7 @@ export class UserDto {
   email: string;
 
   @Expose()
-  @ApiProperty({ type: [EventDto] })
+  @ApiProperty({ type: [EventDto], readOnly: true })
   @Type(() => EventDto)
   consents: EventDto[];
 }

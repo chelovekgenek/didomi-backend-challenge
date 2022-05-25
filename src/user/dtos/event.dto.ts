@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { IsBoolean, IsEnum } from 'class-validator';
 
 export enum NotificationType {
   EMAIL = 'email_notifications',
@@ -12,9 +13,11 @@ export class EventDto {
     enum: NotificationType,
     example: NotificationType.EMAIL,
   })
+  @IsEnum(NotificationType)
   id: NotificationType;
 
   @Expose()
   @ApiProperty({ example: false })
+  @IsBoolean()
   enabled: boolean;
 }

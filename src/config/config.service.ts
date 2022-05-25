@@ -1,12 +1,13 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Logger } from '@nestjs/common';
 import { validateSync } from 'class-validator';
 import { plainToClass } from 'class-transformer';
+import { LoggerOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { join } from 'path';
 import * as fs from 'fs';
 
 import { ConfigSchema } from './config.schema';
-import { Logger } from '@nestjs/common';
 
 export class ConfigService {
   private readonly schema: ConfigSchema;
@@ -54,6 +55,7 @@ export class ConfigService {
       database: this.schema.POSTGRES_DB,
       entities: JSON.parse(this.schema.POSTGRES_ENTITIES),
       synchronize: this.schema.POSTGRES_SYNCHRONIZE,
+      logging: this.schema.POSTGRES_LOGGING as LoggerOptions,
       keepConnectionAlive: true,
     };
   }

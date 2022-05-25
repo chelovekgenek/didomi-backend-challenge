@@ -3,25 +3,26 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+
 import { Event } from './event.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ unique: true })
   email: string;
 
-  @OneToMany(() => Event, (event) => event.user, { onDelete: 'CASCADE' })
-  events: Event[];
+  @OneToMany(() => Event, (event) => event.user, {
+    eager: true,
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  consents: Event[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 }

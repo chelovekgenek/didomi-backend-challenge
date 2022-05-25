@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 import { ToNumber, ToBoolean } from '../common/decorators';
-import { NodeEnv } from './config.types';
+import { NodeEnv, PostgresLogging } from './config.types';
 
 export class ConfigSchema {
   @IsEnum(NodeEnv)
@@ -39,7 +39,10 @@ export class ConfigSchema {
 
   @ToBoolean()
   @IsBoolean()
-  POSTGRES_SYNCHRONIZE = false;
+  POSTGRES_SYNCHRONIZE = true;
+
+  @IsEnum(PostgresLogging)
+  POSTGRES_LOGGING: PostgresLogging = PostgresLogging.ERROR;
 
   @IsString()
   @IsNotEmpty()
