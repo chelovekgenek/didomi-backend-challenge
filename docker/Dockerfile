@@ -13,9 +13,8 @@ FROM base as builder
 
 WORKDIR /build
 
-COPY env ./env
 COPY src ./src
-COPY *.json *.lock *.js .npmrc ./
+COPY *.json *.lock *.js ./
 
 # yarn depends on bash and git
 RUN apk add --no-cache bash git
@@ -37,7 +36,6 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /build/env env
 COPY --from=builder /build/dist dist
 COPY --from=builder /build/node_modules node_modules
 COPY --from=builder /build/package.json package.json
@@ -46,7 +44,7 @@ COPY --from=builder /build/package.json package.json
 RUN adduser -D app && \
     chown -R app: /app
 
-USER system0
+USER app
 
 EXPOSE 8080
 

@@ -1,5 +1,5 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Logger } from '@nestjs/common';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { validateSync } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { LoggerOptions } from 'typeorm';
@@ -14,24 +14,31 @@ export class ConfigService {
   private readonly logger = new Logger(ConfigService.name);
 
   constructor() {
-    let config: Partial<ConfigSchema> = {};
+    this.schema = this.initSchema();
+  }
+
+  initSchema(): ConfigSchema {
+    let config: Partial<ConfigSchema> = process.env as Record<string, string>;
     const path = join(process.cwd(), '.env');
     if (fs.existsSync(path)) {
       const { parsed } = dotenv.config({
         path,
         debug: process.env.DOT_DEBUG?.toLowerCase() === 'true',
       });
-      config = parsed;
+      config = Object.assign(config, parsed);
     }
 
-    this.schema = this.validateInput(config);
+    return this.validateSchema(config);
   }
 
-  private validateInput(schema: Partial<ConfigSchema>): ConfigSchema {
-    const classObj = plainToClass(ConfigSchema, schema);
+  validateSchema(schema: Partial<ConfigSchema>): ConfigSchema {
+    const classObj = plainToClass(ConfigSchema, schema, {
+      exposeDefaultValues: true,
+      excludeExtraneousValues: true,
+    });
     const errors = validateSync(classObj);
     if (errors.length) {
-      this.logger.error('Config validation error!');
+      this.logger.error('Errors during config validation:');
       errors
         .map((err) => Object.values(err.constraints || {}).join(','))
         .forEach((err) => this.logger.error(err));

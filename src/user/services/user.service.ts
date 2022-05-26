@@ -60,7 +60,9 @@ export class UserService {
       UserDto,
       {
         ...user,
-        consents: user.consents.map(this.eventService.toDto.bind(this)),
+        consents: user.consents.map((consent) =>
+          this.eventService.toDto(consent),
+        ),
       },
       { excludeExtraneousValues: true },
     );
