@@ -13,6 +13,7 @@ class ParamsDto {
 @Injectable()
 export class UserByIdPipe implements PipeTransform<ParamsDto, Promise<User>> {
   constructor(private readonly userService: UserService) {}
+
   async transform(
     params: ParamsDto,
     metadata: ArgumentMetadata,

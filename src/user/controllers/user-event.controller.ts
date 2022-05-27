@@ -6,7 +6,7 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 import { ValidationPipe } from '../../common/pipes';
 import { EventDto } from '../dtos';
@@ -21,6 +21,7 @@ export class UserEventController {
   @Post(':id/events')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create a new user event' })
+  @ApiParam({ name: 'id' })
   @ApiResponse({ status: HttpStatus.CREATED, type: EventDto })
   @ApiResponse({
     status: HttpStatus.UNPROCESSABLE_ENTITY,
